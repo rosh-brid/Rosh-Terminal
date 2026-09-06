@@ -26,8 +26,6 @@ class MainActivity : AppCompatActivity() {
     private fun PasangId() {
         terminal = findViewById(R.id.terminal)
         mode = findViewById(R.id.mode)
-        
-        // Inisialisasi default awal untuk shell agar tidak uninitialized
         shell = ShellCustom() 
         
         terminal.setOnCommandListener { perintah ->
@@ -36,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     }
     
     override fun onBackPressed() {
-        // Biarkan kosong jika ingin menonaktifkan tombol back
+        
     }
     
     private fun Awal() {

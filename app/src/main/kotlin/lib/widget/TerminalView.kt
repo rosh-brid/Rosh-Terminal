@@ -86,18 +86,28 @@ class TerminalView @JvmOverloads constructor(
 
         for (i in barisList.indices) {
             val baris = barisList[i]
-            
+
             if (i == barisList.lastIndex) {
-                val bagianDirDanSimbol = "$direktoriSaatIni $ "
-                kertas.drawText(bagianDirDanSimbol, marginKiri, posisiY, teksDir)
-                val lebarDir = teksDir.measureText(bagianDirDanSimbol)
-                kertas.drawText(inputUser, marginKiri + lebarDir, posisiY, teks)
-            } else {
-                kertas.drawText(baris, marginKiri, posisiY, teks)
-            }
-            
-            posisiY += tinggiBaris
-        }
+
+    posisiY = TulisInput(
+        kertas,
+        marginKiri,
+        posisiY
+    )
+
+} else {
+
+    posisiY = TulisTeks(
+        kertas,
+        baris,
+        marginKiri,
+        posisiY,
+        teks
+    )
+}
+
+    posisiY += tinggiBaris
+}
     }
 
     fun append(terima: String?) {
@@ -259,4 +269,84 @@ override fun onCreateInputConnection(
 
     onCommandListener?.invoke(perintahFinal)
     }
+    
+    private fun TulisTeks(
+    kertas: Canvas,
+    teksTulis: String,
+    x: Float,
+    y: Float,
+    paint: Paint
+): Float {
+
+    val lebarMaks = width - x - 20f
+    val tinggiBaris = teks.descent() - teks.ascent()
+
+    if (paint.measureText(teksTulis) <= lebarMaks) {
+        kertas.drawText(teksTulis, x, y, paint)
+        return y
+    }
+
+    var bagian = ""
+    var posisiY = y
+
+    for (karakter in teksTulis) {
+
+        val calon = bagian + karakter
+
+        if (paint.measureText(calon) > lebarMaks) {
+
+            if (bagian.isNotEmpty()) {
+                kertas.drawText(
+                    bagian,
+                    x,
+                    posisiY,
+                    paint
+                )
+
+                posisiY += tinggiBaris
+            }
+
+            bagian = karakter.toString()
+
+        } else {
+            bagian = calon
+        }
+    }
+
+    if (bagian.isNotEmpty()) {
+        kertas.drawText(
+            bagian,
+            x,
+            posisiY,
+            paint
+        )
+    }
+
+    return posisiY
+}
+
+private fun TulisInput(
+    kertas: Canvas,
+    x: Float,
+    y: Float
+): Float {
+
+    val bagianDirDanSimbol = "$direktoriSaatIni $ "
+    val lebarDir = teksDir.measureText(bagianDirDanSimbol)
+
+    kertas.drawText(
+        bagianDirDanSimbol,
+        x,
+        y,
+        teksDir
+    )
+
+    return TulisTeks(
+        kertas,
+        inputUser,
+        x + lebarDir,
+        y,
+        teks
+    )
+}
 }
