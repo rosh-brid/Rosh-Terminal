@@ -7,9 +7,12 @@ import android.os.Bundle
 import android.widget.*
 
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.core.view.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var pusat: DrawerLayout 
     private lateinit var terminal: TerminalView
     private lateinit var shell: Shell
     private lateinit var mode: Switch
@@ -24,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun PasangId() {
+        pusat = findViewById(R.id.pusat)
         terminal = findViewById(R.id.terminal)
         mode = findViewById(R.id.mode)
         shell = ShellCustom() 
@@ -34,7 +38,9 @@ class MainActivity : AppCompatActivity() {
     }
     
     override fun onBackPressed() {
-        
+        if(pusat.isDrawerOpen(GravityCompat.START)){
+            pusat.closeDrawer(GravityCompat.START)
+        }
     }
     
     private fun Awal() {
