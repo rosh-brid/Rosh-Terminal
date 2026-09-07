@@ -41,7 +41,7 @@ class TerminalView @JvmOverloads constructor(
         isAntiAlias = true
     }
 
-    private val maxLine = 100
+    private val maxLine = 5000
     private var isiTerminal: String = "TerminalView ready...\n"
     private var direktoriSaatIni: String = "~"
     private var inputUser: String = ""
